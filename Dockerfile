@@ -5,9 +5,11 @@ MAINTAINER Jérémy Baumgarth
 # Install php
 RUN apk update && \
     apk upgrade && \
-    apk add --update php7 \
+    apk add --update libressl libressl-dev libssl1.0 supervisor \
+    php7 \
     php7-fpm \
-    php7-cli \
+    php7-openssl \
+    #php7-cli \
     php7-common \
     php7-dev \
     php7-opcache \
@@ -15,23 +17,36 @@ RUN apk update && \
     php7-gd \
     php7-intl \
     php7-memcached \
-    php7-mysql \
+    #php7-mysql \
     php7-redis \
     php7-curl \
     php7-json \
     php7-xsl \
     php7-xml \
     php7-mongodb \
-    php7-imagick \
-    --repository http://dl-cdn.alpinelinux.org/alpine/edge/community/ && \
+    #php7-imagick \
+    --repository http://dl-cdn.alpinelinux.org/alpine/edge/main/ \
+    --repository http://dl-cdn.alpinelinux.org/alpine/edge/community/ \
+    --repository http://dl-cdn.alpinelinux.org/alpine/edge/testing/ && \
+    mkdir /var/log/supervisor && \
     rm -rf /var/cache/apk/*
+
+# Nginx configuration
+COPY config/nginx/nginx.conf /etc/nginx/nginx.conf
+COPY config/nginx/conf.d/ /etc/nginx/conf.d/
+
+# PHP configuration
+COPY config/php/php-fpm.d/ /etc/php7/php-fpm.d/
+COPY config/php/conf.d/ /etc/php7/conf.d/
+
+# Default pages
+COPY src/ /var/www/
+
+# Configure supervisord
+COPY config/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
 # init scrip
 COPY init_script.sh /init_script.sh
 RUN chmod +x /init_script.sh
-
-# symlink stout to access log file, an stderr to error log file
-RUN ln -sf /dev/stdout /var/log/nginx/access.log && \
-    ln -sf /dev/stderr /var/log/nginx/error.log
 
 CMD ["/bin/sh", "/init_script.sh"]

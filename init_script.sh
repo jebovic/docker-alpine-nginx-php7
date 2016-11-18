@@ -1,4 +1,3 @@
 #!/bin/bash
 
-/usr/sbin/nginx -V
-/usr/sbin/nginx -g 'daemon off;'
+/usr/bin/supervisord -c /etc/supervisor/conf.d/supervisord.conf
