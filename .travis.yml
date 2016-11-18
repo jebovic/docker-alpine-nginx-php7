@@ -1,0 +1,14 @@
+services:
+  - docker
+
+script:
+  - container_id=$(mktemp)
+  - docker build -t container_under_test .
+  - docker run --detach container_under_test > "${container_id}"
+  - docker exec "$(cat ${container_id})" env TERM=xterm nginx --version
+  - docker exec "$(cat ${container_id})" env TERM=xterm nginx -t
+  - docker exec "$(cat ${container_id})" env TERM=xterm php -v
+
+notifications:
+  slack:
+    secure: vE/QBadg5ddaiqBBQfMCc/1igUfAYMK+KPqQozhAk0kg5qZo9zrndgRCWFnYek3XUBZp/QntPJ5tFbb4zisZR30x/Zj7gw+02vqGGRnhM5Oqriu7lzxOihWeeyT43jZ4s7AxXYOpd2ko4pdEIDc4O65oj+xH31s13ttmpEAgDABWGf45YlJBMXYUHqAdCxXpL4++RZz5DRKhIX8BT4KpiMFYoOnNebBZBZ/ZrAptosyg+O34yxPENzNvIq6VYg111R9q3sVmDMKSQwwdKdxNDLQB/4cM9xIYtIixMNw86HzGCx8jea8ZDXx5A9JnNeWS3Z3A47eUARR6fwh3YOMPFzbQODwSSC4onTD6K7W51aaHWyk40dAhUdvDp7anJA3a/QjL+BkskM7OCTp1+PXSA+au5asub3BTj+BhYYiafrwe0bPObfE1vC6sKqte2dAwgGmVcVN9dJJino48hJmVY8dQo8rd3zmxc48jZyQf+3OkHGkY51O0Jcs6OFCvoinMQd6VeclNxkt9M4RxE2rrP8b5KFpWJOvSNw4Re3p44Vzyr4IBpqATrplMfQCMH+pGpOH8pt0lD4LcrqFflvaWHL0ay75siUU4Hphma5T1Q9IBIzYfEW50aCBUusHhxpEEBgDayoGOIN8/ld9xPs8OFgAhj42vpGe+C/0ghdCJhZ4=
