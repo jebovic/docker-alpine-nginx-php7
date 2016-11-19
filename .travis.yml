@@ -4,10 +4,10 @@ services:
 script:
   - container_id=$(mktemp)
   - docker build -t container_under_test .
-  - docker run --detach -p 80:80 container_under_test > "${container_id}"
+  - docker run --detach -p 8183:80 container_under_test > "${container_id}"
   - docker exec "$(cat ${container_id})" env TERM=xterm nginx -v
   - docker exec "$(cat ${container_id})" env TERM=xterm nginx -t
-  - curl http://localhost
+  - curl http://localhost:8183/index.html
   - docker exec "$(cat ${container_id})" env TERM=xterm php7 -v
 
 notifications:
