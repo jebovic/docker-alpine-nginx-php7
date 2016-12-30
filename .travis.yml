@@ -8,9 +8,11 @@ script:
   - docker logs "$(cat ${container_id})"
   - docker exec "$(cat ${container_id})" env TERM=xterm nginx -v
   - docker exec "$(cat ${container_id})" env TERM=xterm nginx -t
+  - docker exec "$(cat ${container_id})" env TERM=xterm php7 -v
+  - docker exec "$(cat ${container_id})" env TERM=xterm redis-server --version
+  - sleep 10
   - curl http://127.0.0.1/index.html
   - curl http://127.0.0.1/index.php
-  - docker exec "$(cat ${container_id})" env TERM=xterm php7 -v
 
 notifications:
   slack:

@@ -5,7 +5,7 @@ MAINTAINER Jérémy Baumgarth
 # Install php
 RUN apk update && \
     apk upgrade && \
-    apk add --update libressl libressl-dev libssl1.0 supervisor \
+    apk add --update libressl libressl-dev libssl1.0 supervisor redis \
     php7 \
     php7-fpm \
     php7-openssl \
@@ -39,6 +39,9 @@ COPY config/nginx/conf.d/ /etc/nginx/conf.d/
 RUN rm /etc/php7/php-fpm.d/www.conf
 COPY config/php/php-fpm.d/ /etc/php7/php-fpm.d/
 COPY config/php/conf.d/ /etc/php7/conf.d/
+
+# Redis configuration
+COPY config/redis/redis.conf /etc/redis.conf
 
 # Default pages
 COPY src/ /var/www/
