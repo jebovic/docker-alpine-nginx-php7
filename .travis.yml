@@ -5,14 +5,14 @@ script:
   - container_id=$(mktemp)
   - docker build -t container_under_test .
   - docker run --detach -p 80:80 container_under_test > "${container_id}"
+  - sleep 10
   - docker logs "$(cat ${container_id})"
   - docker exec "$(cat ${container_id})" env TERM=xterm nginx -v
   - docker exec "$(cat ${container_id})" env TERM=xterm nginx -t
   - docker exec "$(cat ${container_id})" env TERM=xterm php7 -v
   - docker exec "$(cat ${container_id})" env TERM=xterm redis-server --version
-  - sleep 10
-  - curl http://127.0.0.1/index.html
-  - curl http://127.0.0.1/index.php
+  - curl http://localhost/index.html
+  - curl http://localhost/index.php
 
 notifications:
   slack:
