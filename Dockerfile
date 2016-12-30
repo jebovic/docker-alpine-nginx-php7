@@ -32,7 +32,7 @@ RUN apk update && \
     rm -rf /var/cache/apk/*
 
 # Nginx configuration
-COPY config/nginx/nginx.conf /etc/nginx/nginx.conf
+RUN rm /etc/nginx/conf.d/*
 COPY config/nginx/conf.d/ /etc/nginx/conf.d/
 
 # PHP configuration
