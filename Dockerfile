@@ -8,6 +8,7 @@ RUN apk update && \
     apk add --update libressl libressl-dev libssl1.0 supervisor redis \
     php7 \
     php7-fpm \
+    php7-ctype \
     php7-pdo \
     php7-zlib \
     php7-phar \
